@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+	<table>
+		<tr>
+			{% for field in fields %}
+				<th>{{field.verbose_name}}</th>
+			{% endfor %}
+		</tr>
+		<tr>
+		{% for instance in model %}
+			<td>{{instance.id}}</td>
+			<td>{{instance.title}}</td>
+			<td>{{instance.audio_file}}</td>
+			<td>{{instance.number_of_streams}}</td>
+		{% endfor %}
+		</tr>
+	</table>
+{% endblock %}

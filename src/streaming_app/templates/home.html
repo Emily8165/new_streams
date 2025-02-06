@@ -1,2 +1,4 @@
 {% extends 'base.html' %}
-Home
+{% block content %}
+    <p><a href={% url 'list_songs' %}>List songs</a></p>
+{% endblock %}
