@@ -1,6 +1,6 @@
 import csv
+import datetime
 import json
-from datetime import datetime, time
 
 from django.db import models
 from mutagen.mp3 import MP3
@@ -23,7 +23,7 @@ def get_languages() -> dict:
 def calculate_song_length(file: str) -> str:
     audio = MP3(file)
     t = int(audio.info.length)
-    return time.strftime("%H:%M:%S", time.gmtime(t))
+    return datetime.time.strftime("%H:%M:%S", datetime.time.gmtime(t))
 
 
 class SongMetaData(models.Model):
@@ -45,8 +45,8 @@ class SongMetaData(models.Model):
         return calculate_song_length(f"src/streaming_app/data/{song_name}")
 
     @property
-    def song_age(self) -> int:
-        return datetime.strftime(datetime.now() - self.release_date, "%Y%m%d")
+    def song_age(self) -> datetime.timedelta:
+        return datetime.date.today() - self.release_date
 
 
 class Song(models.Model):
