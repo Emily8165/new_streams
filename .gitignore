@@ -3,7 +3,8 @@
 .env
 /.pytest_cache
 **/__pycache__/**
-/db.sqlite3
 src/streaming_app/__pycache__/
-src/db.sqlite3
+notes.py
 
+src/db.sqlite3
+/wordle_guesser
