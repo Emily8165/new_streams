@@ -16,7 +16,7 @@ class HomeView(generic.TemplateView):
 
 class ListAllSongs(generic.ListView):
     template_name = "list_of_songs.html"
-    title = "list of songs"
+    title = "List of Songs"
     model = models.Song
     fields = [
         field
@@ -33,4 +33,5 @@ class ListAllSongs(generic.ListView):
 
 
 class SongMetaDataView(generic.DetailView):
-    pass
+    template_name = "song_meta_data.html"
+    title = "Song Meta Data"
