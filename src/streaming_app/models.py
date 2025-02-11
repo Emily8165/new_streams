@@ -3,6 +3,7 @@ import datetime
 import json
 
 from django.db import models
+from django.utils import timezone
 from mutagen.mp3 import MP3
 
 colours = (("red", "red"), ("blue", "blue"), ("green", "green"))
@@ -54,3 +55,15 @@ class Song(models.Model):
     audio_file = models.FileField(upload_to="data/")
     number_of_streams = models.PositiveIntegerField()
     meta_data = models.ForeignKey(SongMetaData, on_delete=models.CASCADE)
+
+
+class ListenerMetaData(models.Model):
+    total_listening_time = models.TimeField(default=timezone.now())
+
+
+class Listener(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    password = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=False)
+    meta_data = models.ForeignKey(ListenerMetaData, on_delete=models.CASCADE, default=1)
