@@ -1,4 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
     <p><a href={% url 'list_songs' %}>List songs</a></p>
+    {% if user.0.name %}
+        <p>Hello {{user.0.name}}</p>
+        <form method="GET">
+            <input type="submit" id="logout" name="logout" value="logout">
+        </form>
+    {% else %}
+        <p><a href={% url 'login' %}>Login</a></p>
+    {% endif %}
 {% endblock %}
