@@ -1,6 +1,7 @@
 import csv
 import datetime
 import json
+import os
 
 from django.db import models
 from mutagen.mp3 import MP3
@@ -10,12 +11,16 @@ track = (("ALBUM", "ALBUM"), ("EP", "EP"), ("LP", "LP"), ("SINGLE", "SINGLE"))
 
 
 def get_music_genres() -> list:
-    with open("src/streaming_app/data/genres.json", "r") as openfile:
+    with open(
+        os.getcwd() + "/src/streaming_app/data/public_data/genres.json", "r"
+    ) as openfile:
         return [(i, i) for i in json.load(openfile)]
 
 
 def get_languages() -> dict:
-    with open("src/streaming_app/data/languages.csv", "r") as csvfile:
+    with open(
+        os.getcwd() + "/src/streaming_app/data/public_data/languages.csv", "r"
+    ) as csvfile:
         reader = csv.reader(csvfile)
         return ((line[0], line[1]) for line in reader)
 

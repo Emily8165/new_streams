@@ -33,4 +33,6 @@ class ListAllSongs(generic.ListView):
 
 
 class SongMetaDataView(generic.DetailView):
-    pass
+    template_name = "song_meta_data.html"
+    title = "Song Meta Data"
+    model = models.ListenerMetaData
