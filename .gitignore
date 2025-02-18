@@ -2,7 +2,7 @@
 /notes
 .env
 **/.pytest_cache
-**/__pycache__/**
+**/__pycache__
 **/db.sqlite3
 src/streaming_app/__pycache__/
 notes.py
