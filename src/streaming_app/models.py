@@ -24,11 +24,22 @@ def get_languages() -> dict:
 def calculate_song_length(file: str) -> str:
     audio = MP3(file)
     t = int(audio.info.length)
-    return datetime.time.strftime("%H:%M:%S", datetime.time.gmtime(t))
+    return datetime.time.strftime("%H:%M:%S", timezone.now())
+
+
+class ArtistMetaData(models.Model):
+    number_of_songs = models.PositiveIntegerField(default=0)
+    genres = models.CharField(max_length=20, choices=get_music_genres())
+    country = models.CharField(max_length=255)
+
+
+class Artist(models.Model):
+    name = models.CharField(max_length=255)
+    artist_meta_data = models.ForeignKey(ArtistMetaData, on_delete=models.CASCADE)
 
 
 class SongMetaData(models.Model):
-    artist_names = models.CharField(max_length=255)
+    artists = models.ForeignKey(Artist, on_delete=models.CASCADE, default=1)
     featured_artists = models.CharField(max_length=255, null=True)
     record_label = models.CharField(max_length=50, default="Independent")
     language = models.CharField(max_length=10, choices=get_languages())
@@ -47,7 +58,7 @@ class SongMetaData(models.Model):
 
     @property
     def song_age(self) -> datetime.timedelta:
-        return datetime.date.today() - self.release_date
+        return datetime.datetime.now() - self.release_date
 
 
 class Song(models.Model):
