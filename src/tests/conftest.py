@@ -1,4 +1,5 @@
 import datetime
+import typing
 
 import pytest
 
@@ -6,19 +7,44 @@ from streaming_app import models
 
 
 @pytest.fixture
-def song_meta_data() -> models.SongMetaData:
+def date_value() -> str:
+    date_str = "2020-01-01"
+    date_format = "%Y-%m-%d"  # Corrected format
+    value = datetime.datetime.strptime(date_str, date_format)
+    return value
+
+
+@pytest.fixture
+def audio_file() -> typing.IO:
+    with open("src/streaming_app/data/mp3_example.mp3", "rb") as file:
+        return file
+
+
+@pytest.fixture
+def artist_meta_data() -> models.ArtistMetaData:
+    return models.ArtistMetaData.objects.create(
+        genres="genres", country="country", artist_key="artist_key"
+    )
+
+
+@pytest.fixture
+def artist(artist_meta_data: models.ArtistMetaData) -> models.Artist:
+    return models.Artist.objects.create(name="name", artist_meta_data=artist_meta_data)
+
+
+@pytest.fixture
+def song_meta_data(artist: models.Artist) -> models.SongMetaData:
     return models.SongMetaData.objects.create(
-        artist_names="test_artist",
-        featured_artists=None,
+        artists=artist,
         record_label="Independent",
         is_cover=False,
         release_date=datetime.date.today(),
         genre="Alternative",
         lyrics=None,
         main_artwork_colour="RED",
-        BPM=100,
         main_instruments="Guitar",
         track_type="SINGLE",
+        spotify_ref="REF",
     )
 
 
