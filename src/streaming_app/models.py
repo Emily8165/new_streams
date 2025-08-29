@@ -249,8 +249,9 @@ class Song(models.Model):
         """
         try:
             if title:
+                breakpoint()
                 existing_song = Song.objects.get(title=title)
-            return existing_song
+                return existing_song
         except Song.DoesNotExist:
             if artist is None:
                 raise ValueError("Args cannot be none if creating an artist")
