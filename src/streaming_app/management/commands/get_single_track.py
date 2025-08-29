@@ -1,53 +1,16 @@
-import json
-import os
-
 from django.core.management.base import BaseCommand
 from dotenv import load_dotenv
 
-from streaming_app import models
+from streaming_app import helper_functions, models
 
 load_dotenv()
 
 
 class Command(BaseCommand):
+    token = helper_functions.Tokens.get_tokens()
+
     def add_arguments(self, parser):
         parser.add_argument("code", nargs="+", type=str)
-
-    def get_tokens(self) -> None:
-        try:
-            id = os.getenv("SPOTIFY_CLIENT_ID")
-            password = os.getenv("SPOITFY_CLIENT_SECRET")
-            get_token = os.popen(
-                f'curl -X POST "https://accounts.spotify.com/api/token" \
-                -H "Content-Type: application/x-www-form-urlencoded" \
-                -d "grant_type=client_credentials&client_id={id}&client_secret={password}"'
-            )
-            token_string = get_token.read().strip()
-            token_json = json.loads(token_string)
-            self.stdout.write(self.style.SUCCESS("Token Aquired!"))
-        except Exception as exc:
-            return self.stdout.write(
-                self.style.ERROR(str(exc) + "tokens not generated")
-            )
-        return token_json["access_token"]
-
-    def get_track_data(self, track_code: str, token: str) -> None:
-        try:
-            request = os.popen(
-                f'curl "https://api.spotify.com/v1/tracks/{track_code}" \
-                -H "Authorization: Bearer  {token}"'
-            )
-            track_string = request.read().strip()
-            track_json = json.loads(track_string)
-            self.stdout.write(
-                self.style.SUCCESS(f"data found for {track_json["artists"][0]["name"]}")
-            )
-        except KeyError:
-            return self.stdout.write(
-                self.style.ERROR("There is a problem with the song code try it again!")
-            )
-
-        return track_json
 
     def handle(self, *args, **options):
         tokens = self.get_tokens()

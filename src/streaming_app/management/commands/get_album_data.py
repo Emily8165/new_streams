@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from dotenv import load_dotenv
 
 load_dotenv()
-from streaming_app import models
+from streaming_app import helper_functions, models
 
 
 def handle_uploaded_file(f, file_path: str):
@@ -15,26 +15,10 @@ def handle_uploaded_file(f, file_path: str):
 
 
 class Command(BaseCommand):
+    token = helper_functions.Tokens.get_tokens()
+
     def add_arguments(self, parser):
         parser.add_argument("code", nargs="+", type=str)
-
-    def get_tokens(self) -> None:
-        try:
-            id = os.getenv("SPOTIFY_CLIENT_ID")
-            password = os.getenv("SPOITFY_CLIENT_SECRET")
-            get_token = os.popen(
-                f'curl -X POST "https://accounts.spotify.com/api/token" \
-                -H "Content-Type: application/x-www-form-urlencoded" \
-                -d "grant_type=client_credentials&client_id={id}&client_secret={password}"'
-            )
-            token_string = get_token.read().strip()
-            token_json = json.loads(token_string)
-            self.stdout.write(self.style.SUCCESS("Token Aquired!"))
-        except Exception as exc:
-            return self.stdout.write(
-                self.style.ERROR(str(exc) + "tokens not generated")
-            )
-        return token_json
 
     def get_album_data(self, album_code: str, token: str) -> dict:
         request = os.popen(
